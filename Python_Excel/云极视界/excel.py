@@ -45,25 +45,34 @@ class Execl():
     def get_score(self):
         score_dict = {}
 
-        for col in range(1,8):
-            for row in range(4, self.rows-15):
-                
-
-
         str = self.data_frame.iloc[1,0].split('：' or ':')
         for s in str[1].split(' '):
             if(s != ''):
-                score_dict["部门"] = s
+                department = s
                 break
 
         for s in str[2].split(' '):
             if(s != ''):
-                score_dict["岗位"] = s
+                post = s
                 break
         
-        score_dict["姓名"] = str[3]
+        name = str[3]
 
-        
+        for row in range(4, self.rows-15):
+            for col in range(5,8):
+                if self.data_frame.iloc[row,col] == "" :
+                    
+
+                score_dict["编号"] = 
+                score_dict["部门"] = department
+                score_dict["岗位"] = post
+                score_dict["姓名"] = name
+                score_dict["项目"] = self.data_frame.fillna(method='ffill').iloc[row,1]
+                score_dict["内容"] = self.data_frame.fillna(method='ffill').iloc[row,2]
+                score_dict["指标获得满分的标准"] = self.data_frame.fillna(method='ffill').iloc[row,3]
+                score_dict["权重"] = self.data_frame.fillna(method='ffill').iloc[row,4]
+                score_dict["占比"] = ""
+                score_dict["分数"] = ""
         
         score_list.append(score_dict)
 
