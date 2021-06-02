@@ -70,7 +70,7 @@ class Execl():
             d["fs"] = self.data_frame.iloc[row,9] if not self.data_frame.iloc[row,9] is np.nan else 0
 
             d["df"] = d["fs"] * d["zb"]# * d["qz"]
-        
+
             info_list.append(d)  
 
 if __name__ == "__main__":
