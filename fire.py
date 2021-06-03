@@ -125,14 +125,14 @@ class XKJD(Ammo):
     range = (0, 800)
     hurt = 50
     number = 1000
-    shoot_number = 10
+    shoot_number = 1
 
 class DKJD(Ammo):
     name = '12.7mm弹'
     range = (0, 1600)
     hurt = 50
     number = 500
-    shoot_number = 10
+    shoot_number = 1
 
 class Own_Entity(Entity):
     name = '我方坦克'
@@ -267,7 +267,8 @@ def onFire(entities, own):
             have_ammo = False
 
             stateDict = {}
-            stateDict["着弹点"] = (entity_dict[i].position[0] + spread[0], entity_dict[i].position[1] + spread[1])
+            stateDict["弹种"] = fire_ammo.name
+            stateDict["弹着点"] = (entity_dict[i].position[0] + spread[0], entity_dict[i].position[1] + spread[1])
 
             if abs(spread[0]) < entity_dict[i].volumes[0]/2 and abs(spread[1]) < entity_dict[i].volumes[0]/2:
                 stateDict['是否击中'] = "击中"
