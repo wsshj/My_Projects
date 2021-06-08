@@ -1,4 +1,0 @@
-﻿  Random_test.cpp
-D:\Project_Files\My_Projects\Random_test\Random_test\Random_test.cpp(28,30): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
-D:\Project_Files\My_Projects\Random_test\Random_test\Random_test.cpp(34,28): warning C4018: “<=”: 有符号/无符号不匹配
-  Random_test.vcxproj -> D:\Project_Files\My_Projects\Random_test\Debug\Random_test.exe
