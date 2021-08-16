@@ -109,14 +109,14 @@ void FireStrike::setSeed(int seed)
 	m_nSeed = seed;
 }
 
-void FireStrike::insertShootTable(string json)
-{
-	ShootTable table;
-
-
-
-	m_tables.push_back(table);
-}
+//void FireStrike::insertShootTable(string json)
+//{
+//	ShootTable table;
+//
+//
+//
+//	m_tables.push_back(table);
+//}
 
 void FireStrike::insertShootTable(ShootTable table)
 {

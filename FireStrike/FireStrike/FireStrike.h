@@ -23,7 +23,7 @@ public:
 
 	virtual void setSeed(int seed);
 
-	virtual void insertShootTable(string json);
+	//virtual void insertShootTable(string json);
 	virtual void insertShootTable(ShootTable table);
 
 	virtual ShootTable getShootTable(int id);

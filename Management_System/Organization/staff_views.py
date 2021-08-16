@@ -1,59 +1,62 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+# from django.core import serializers
 import json
+
+from Organization import common
 
 from Organization.models import Staff
 from Organization.models import Department
 from Organization.models import Position
 
-# Create your staff views here.
-def has_none(values):
-    for value in values:
-        if value is None:
-            return True
+def select_to_json(responses):
+    data = {}
+    data['status'] = 200
 
-    return False
-
-def select_by_id(staff_id):
-    staffs = Staff.objects.filter(id=staff_id).values()
-
-    return staffs
-
-def select_by_number(staff_number):
-    staffs = Staff.objects.filter(number=staff_number).values()
-
-    return staffs
-
-def form_json(staffs):
-    data = {}    
-
-    for staff in staffs:
-        staff['entry_time'] = staff['entry_time'].strftime("%Y-%m-%d")
-        staff['department'] = Department.objects.filter(id=staff['department_id']).values('name').first()['name']
-        staff['position'] = Position.objects.filter(id=staff['position_id']).values('name').first()['name']
+    for response in responses:
+        response['entry_time'] = response['entry_time'].strftime('%Y-%m-%d')
+        response['department_name'] = Department.objects.filter(id=response['department_id']).values().first()['name']
+        response['position_name'] = Position.objects.filter(id=response['position_id']).values().first()['name']
+        response.pop('add_date')
+        response.pop('mod_date')
     
-    data['staff'] = list(staffs)
+    data['response'] = list(responses)
 
     return json.dumps(data,ensure_ascii=False)
 
+# Create your staff views here.
 def insert(request):
     if request.method != "POST":
         return HttpResponse("<p>请求方式错误！</p>")
 
     response = {}
 
-    response['name'] = request.get('name', default=None)
-    response['level'] = request.get('level', default=0)
-    response['describe'] = request.get('describe', default='')
+    response['number'] = request.POST.get('number', default=None)
+    response['name'] = request.POST.get('name', default=None)
+    response['sex'] = request.POST.get('sex', default=None)
+    response['department_id'] = request.POST.get('department_id', default=None)
+    response['position_id'] = request.POST.get('position_id', default=None)
+    response['boss_id'] = request.POST.get('boss_id', default=None)
+    response['boss_name'] = request.POST.get('boss_name', default=None)
+    response['entry_time'] = request.POST.get('entry_time', default=None)
+    response['phone'] = request.POST.get('phone', default=None)
 
-    if has_none(response):
+    if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
-    department = Staff(name=response['name'])
-    department = Staff(name=response['level'])
-    department = Staff(name=response['describe'])
+    staff = Staff(
+        number=response['number'],
+        name=response['name'],
+        department=Department.objects.get(id=response['department_id']),
+        position=Position.objects.get(id=response['position_id']),
+        sex=response['sex'],
+        boss_id=response['boss_id'],
+        boss_name=response['boss_name'],
+        entry_time=response['entry_time'],
+        phone=response['phone'],
+        )
 
-    department.save()
+    staff.save()
 
     return HttpResponse("<p>数据添加成功！</p>")
 
@@ -61,7 +64,7 @@ def delete(request):
     if request.method != "POST":
         return HttpResponse("<p>请求方式错误！</p>")
 
-    response = request.get('id', default=None)
+    response = request.POST.get('id', default=None)
 
     if response is None:
         return HttpResponse("<p>ID为空！</p>")
@@ -76,11 +79,11 @@ def update(request):
 
     response = {}
 
-    response['id'] = request.get('id', default=None)
-    response['key'] = request.get('key', default=None)
-    response['value'] = request.get(response['key'], default=None)
+    response['id'] = request.POST.get('id', default=None)
+    response['key'] = request.POST.get('key', default=None)
+    response['value'] = request.POST.get('value', default=None)
 
-    if has_none(response):
+    if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
     data = {response['key'] : response['value']}
@@ -99,15 +102,15 @@ def select(request):
     response['number'] = request.POST.get('number', default=None)
 
     if not response['id'] is None:
-        staffs = select_by_id(response['id'])
+        staffs = Staff.objects.filter(id=response['id']).values().order_by('id')
     elif not response['number'] is None:
-        staffs = select_by_number(response['number'])
+        staffs = Staff.objects.filter(number=response['number']).values().order_by('id')
     else:
-        staffs = Staff.objects.values()
+        staffs = Staff.objects.values().order_by('id')
 
-    json_data = form_json(staffs)
+    json = select_to_json(staffs)
 
-    return HttpResponse(json_data)
+    return HttpResponse(json)
 
 def login(request):
     if request.method != "POST":
@@ -118,7 +121,7 @@ def login(request):
     response['number'] = request.POST.get('username', default=None)
     response['password'] = request.POST.get('password', default=None)
 
-    if has_none(response):
+    if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
     if Staff.objects.filter(number=response['number']).count() == 0:
@@ -127,6 +130,11 @@ def login(request):
     password = Staff.objects.filter(number=response['number']).values('passwd').first()['passwd']
 
     if response['password'] == password:
-        return HttpResponse(form_json(select_by_number(response['number'])))
+        # staff = Staff.objects.filter(number=response['number']).select_related()
+        # print(staff.query.__str__())
+
+        staff_json = select_to_json(Staff.objects.filter(number=response['number']).values())
+
+        return HttpResponse(staff_json)
     else:
         return HttpResponse("<p>密码错误</p>")

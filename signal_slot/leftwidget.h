@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLabel>
 
+
 namespace Ui {
 class LeftWidget;
 }
@@ -27,6 +28,7 @@ private:
 
     QPushButton* m_button;
     QLabel* m_label;
+
 
 signals:
     void sendText(QString str);

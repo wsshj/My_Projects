@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLabel>
+#include <QStack>
 
 #include "rightwidget.h"
 #include "leftwidget.h"
@@ -22,6 +23,7 @@ public:
 
     void init();
     void resizeEvent(QResizeEvent *event) override;
+    void lalal();
 
 private:
     Ui::MainWindow *ui;
@@ -30,6 +32,8 @@ private:
     LeftWidget* m_left;
 
     QLabel* m_label;
+
+    QStack<QPushButton*> buttons;
 
 
 signals:

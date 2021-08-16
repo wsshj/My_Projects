@@ -1,10 +1,10 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 from django.http import HttpResponse
 import json
 
 from Organization import common
-from Organization.models import Position
 
+from Organization.models import Matter
 
 def insert(request):
     if request.method != "POST":
@@ -12,16 +12,14 @@ def insert(request):
 
     response = {}
 
-    response['name'] = request.get('name', default=None)
-    response['pid'] = request.get('pid', default=None)
-    response['describe'] = request.get('describe', default='')
+    response['name'] = request.POST.get('name', default=None)
 
     if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
-    department = Position(name=response['name'])
-    department = Position(name=response['pid'])
-    department = Position(name=response['describe'])
+    department = Matter(
+        name=response['name'],
+        )
 
     department.save()
 
@@ -36,7 +34,7 @@ def delete(request):
     if response is None:
         return HttpResponse("<p>ID为空！</p>")
 
-    Position.objects.filter(id=response).delete()
+    Matter.objects.filter(id=response).delete()
 
     return HttpResponse("<p>删除成功</p>")
 
@@ -55,7 +53,7 @@ def update(request):
 
     data = {response['key'] : response['value']}
 
-    Position.objects.filter(id=response['id']).update(**data)
+    Matter.objects.filter(id=response['id']).update(**data)
 
     return HttpResponse("<p>修改成功</p>")
 
@@ -65,10 +63,8 @@ def select(request):
 
     data = {}
 
-    response = Position.objects.values()
+    response = Matter.objects.values()
 
-    data['position'] = list(response)
+    data['matter'] = list(response)
 
-    json_data = json.dumps(data,ensure_ascii=False)
-
-    return HttpResponse(json_data)
+    return HttpResponse(json.dumps(data, ensure_ascii=False))

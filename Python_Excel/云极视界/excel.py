@@ -34,7 +34,7 @@ class Execl():
 
     def get_staff(self):
         str = self.data_frame.iloc[1,0].split('：' or ':')
-
+        print(str)
         staff_list.append(str[3])
 
     def get_judge(self):
@@ -65,10 +65,10 @@ class Execl():
         for row in range(4, self.rows-4):
             judge_num = 3
             ratio = 0
-            if self.data_frame.iloc[row, 7] is np.nan :
+            if self.data_frame.iloc[row, 8] is np.nan :
                 judge_num -= 1
 
-            if self.data_frame.iloc[row, 6] is np.nan :
+            if self.data_frame.iloc[row, 7] is np.nan :
                 judge_num -= 1
 
             for col in range(1, judge_num+1):
@@ -101,8 +101,8 @@ class Execl():
                 score_dict["内容"] = self.data_frame.iloc[row,2] if not self.data_frame.iloc[row,2] is np.nan else ""
                 score_dict["指标获得满分的标准"] = self.data_frame.iloc[row,3] if not self.data_frame.iloc[row,3] is np.nan else ""
                 score_dict["权重"] = "%s%%" % round(float(self.data_frame.iloc[row,4]) * 100) if not self.data_frame.iloc[row,4] is np.nan else ""
-                
-                score_dict["考核人"] = self.data_frame.iloc[row,4+col]
+                score_dict["工作总结（工作成果及后续情况）"] = self.data_frame.iloc[row,5] if not self.data_frame.iloc[row,5] is np.nan else ""
+                score_dict["考核人"] = self.data_frame.iloc[row,5+col]
 
                 score_dict["占比"] = ratio
                 score_dict["分数"] = ""

@@ -414,9 +414,9 @@ if __name__ == "__main__":
     own.print()
 
     
-    for i in range(100):
-        R1 = random.random()
-        R2 = random.random()
-        print(math.cos(2*math.pi*R2) * math.sqrt(-math.log(R1)/0.2274768))
+    # for i in range(100):
+    #     R1 = random.random()
+    #     R2 = random.random()
+    #     print(math.cos(2*math.pi*R2) * math.sqrt(-math.log(R1)/0.2274768))
 
     os.system('pause')

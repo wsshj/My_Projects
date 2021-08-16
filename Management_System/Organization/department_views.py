@@ -3,14 +3,8 @@ from datetime import date
 from django.http import HttpResponse
 import json
 
+from Organization import common
 from Organization.models import Department
-
-def has_none(values):
-    for value in values:
-        if value is None:
-            return True
-
-    return False
 
 def insert(request):
     if request.method != "POST":
@@ -19,14 +13,14 @@ def insert(request):
     response = {}
 
     response['name'] = request.get('name', default=None)
-    response['level'] = request.get('level', default=0)
+    response['pid'] = request.get('pid', default=None)
     response['describe'] = request.get('describe', default='')
 
-    if has_none(response):
+    if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
     department = Department(name=response['name'])
-    department = Department(name=response['level'])
+    department = Department(name=response['pid'])
     department = Department(name=response['describe'])
 
     department.save()
@@ -37,7 +31,7 @@ def delete(request):
     if request.method != "POST":
         return HttpResponse("<p>请求方式错误！</p>")
 
-    response = request.get('id', default=None)
+    response = request.POST.get('id', default=None)
 
     if response is None:
         return HttpResponse("<p>ID为空！</p>")
@@ -52,11 +46,11 @@ def update(request):
 
     response = {}
 
-    response['id'] = request.get('id', default=None)
-    response['key'] = request.get('key', default=None)
-    response['value'] = request.get(response['key'], default=None)
+    response['id'] = request.POST.get('id', default=None)
+    response['key'] = request.POST.get('key', default=None)
+    response['value'] = request.POST.get('value', default=None)
 
-    if has_none(response):
+    if common.has_none(response):
         return HttpResponse("<p>参数错误！</p>")
 
     data = {response['key'] : response['value']}
