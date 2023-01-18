@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -23,7 +23,6 @@ public:
 
     void init();
     void resizeEvent(QResizeEvent *event) override;
-    void lalal();
 
 private:
     Ui::MainWindow *ui;
@@ -32,9 +31,6 @@ private:
     LeftWidget* m_left;
 
     QLabel* m_label;
-
-    QStack<QPushButton*> buttons;
-
 
 signals:
     void sendColor(QColor color);
