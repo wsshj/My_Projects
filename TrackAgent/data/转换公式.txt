@@ -1,0 +1,108 @@
+ /// <summary>
+    /// 通过经纬度获取 Unity 2D坐标(不含高度)
+    /// </summary>
+    /// <param name="point"><see cref="Point2"/>对象, 对经纬度的封装</param>
+    /// <returns></returns>
+    public static Vector2 ToVector(Point2 point)
+    {
+        double _x = ((point.longitude - 122.136829994473) * 85034.617864360044246411962685833 + 2140);
+        double _y = -((point.latitude - 37.4688299967702) * -103627.52438550783120400193244459 + 8312) + 7609;
+        return new Vector2((float)_x, (float)_y);
+
+        //double[] curent = LatLonToUTMXY(point.longitude, point.latitude);
+        //double[] center = LatLonToUTMXY(_longitude, _latitude);
+        //double _x = center[0] - curent[0];
+        //double _y = center[1] - curent[1];
+        //return new Vector2((float)_x, (float)_y);
+    }
+
+    /// <summary>
+    /// 通过经纬度获取 Unity 2D坐标(2维平面坐标 不含高度)
+    /// </summary>
+    /// <param name="longitude">经度</param>
+    /// <param name="latitude">纬度</param>
+    /// <returns></returns>
+    public static Vector2 ToVector(double longitude, double latitude)
+    {
+        double _x = ((longitude - 122.136829994473) * 85034.617864360044246411962685833 + 2140);
+        double _y = -((latitude - 37.4688299967702) * -103627.52438550783120400193244459 + 8312) + 7609;
+        return new Vector2((float)_x, (float)_y);
+        //double[] curent = LatLonToUTMXY(longitude, latitude);
+        //double[] center = LatLonToUTMXY(_longitude, _latitude);
+        //double _x = center[0] - curent[0];
+        //double _y = center[1] - curent[1];
+        //return new Vector2((float)_x, (float)_y);
+    }
+
+    /// <summary>
+    /// 通过经纬高度获取 Unity 3D坐标(含高度)
+    /// </summary>
+    /// <param name="point"><see cref="Point3"/>对象, 对经纬高数据的封装</param>
+    /// <returns></returns>
+    public static Vector3 ToVector(Point3 point)
+    {
+        double _x = ((point.longitude - 122.136829994473) * -85369.821291030713527972595556599 - 1809.04);
+        double _y = ((point.latitude - 37.4688299967702) * -103620.81635379537645599988767665 + 4227.987);
+        return new Vector3((float)_x, (float)point.height,(float)_y);
+        //double[] current = LatLonToUTMXY(point.longitude, point.latitude);
+        //double[] center = LatLonToUTMXY(_longitude, _latitude);
+        //double _x = center[0] - current[0];
+        //double _y = center[1] - current[1];
+        //return new Vector3((float)_x, (float)point.height, (float)_y);
+    }
+
+    /// <summary>
+    /// 通过经纬高度获取 Unity 3D坐标(含高度)
+    /// </summary>
+    /// <param name="point"><see cref="Point2"/>对象, 对经纬度的封装</param>
+    /// <param name="height">高度</param>
+    /// <returns></returns>
+    public static Vector3 ToVector(Point2 point, double height)
+    {
+        double _x = ((point.longitude - 122.136829994473) * -85369.821291030713527972595556599 - 1809.04);
+        double _y = ((point.latitude - 37.4688299967702) * -103620.81635379537645599988767665 + 4227.987);
+        return new Vector3((float)_x, (float)height, (float)_y);
+        //double[] current = LatLonToUTMXY(point2.longitude, point2.latitude);
+        //double[] center = LatLonToUTMXY(_longitude, _latitude);
+        //double _x = center[0] - current[0];
+        //double _y = center[1] - current[1];
+        //return new Vector3((float)_x, (float)height, (float)_y);
+    }
+
+    /// <summary>
+    /// 通过经纬高度获取 Unity 3D坐标(含高度)
+    /// </summary>
+    /// <param name="longitude">经度</param>
+    /// <param name="latitude">纬度</param>
+    /// <param name="height">高度</param>
+    /// <returns></returns>
+    public static Vector3 ToVector(double longitude, double latitude, double height)
+    {
+//        double _x = ((longitude - 122.136829994473) * -85369.821291030713527972595556599 - 1809.04);
+//        double _y = ((latitude - 37.4688299967702) * -103620.81635379537645599988767665 + 4227.987);
+//        return new Vector3((float)_x, (float)height, (float)_y);
+
+        double[] current = LatLonToUTMXY(longitude, latitude);
+        double[] center = LatLonToUTMXY(_longitude, _latitude);
+        double _x = center[0] - current[0];
+        double _y = center[1] - current[1];
+        return new Vector3((float)_x, (float)height, (float)_y);
+    }
+
+    /// <summary>
+    /// 通过 Unity 2D坐标(不含高度) 获取经纬度
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public static double[] ToLatLon(Vector2 position)
+    {
+        double[] latLon = new double[2]; 
+        latLon[0] = (position.x - 2140) / 85034.617864360044246411962685833 + 122.136829994473;
+        latLon[1] = (7609 - position.y - 8312) / -103627.52438550783120400193244459 + 37.4688299967702;
+        return latLon;
+        
+        //double _x = center[0] - position.x;
+        //double _y = center[1] - position.y;
+        //double _zone = center[2];
+        //return UTMXYToLatLon(_x, _y, _zone, false);
+    }
