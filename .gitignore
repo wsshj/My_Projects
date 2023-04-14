@@ -1,4 +1,5 @@
 # Blender
+/Blender/*.blend1
 *.blend1
 
 # Prerequisites
@@ -422,4 +423,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-/Blender/*.blend1
